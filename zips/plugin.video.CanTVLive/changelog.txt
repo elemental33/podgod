@@ -1,3 +1,10 @@
+[b]1.9[/b]
+Links updated. Added Teletoon. Playercorefactory method removed and replaced by P2P streams. [B]P2P-Streams[/B] addon required for sports channels. Make sure it is properly configured for your system. More Info: http://tinyurl.com/p2pstreamsconfig
+Bonus channels updated. These links come and go, enjoy while you can.
+
+[b]1.8[/b]
+Repaired many channel links. Added new CTV News and 4 City TV channels. Sports channel sources changed.
+
 [b]1.7[/b]
 - Repaired broken TSN links. Added SN World & SN1. 
 These require an external player setup. For mor info, go to http://kodi.wiki/view/External_players
