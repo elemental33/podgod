@@ -1,0 +1,87 @@
+#EXTM3U
+
+#EXTINF:-1, [B][COLOR red]O[/COLOR][COLOR white]H[/COLOR] [COLOR red]C[/COLOR][COLOR white]A[/COLOR][COLOR red]N[/COLOR][COLOR white]A[/COLOR][COLOR red]D[/COLOR][COLOR white]A[/COLOR][/B]
+http://fla.fg-a.com/flags/canadian-flag-large.png
+#EXTINF:0, [B]Bonus Channels[/B]
+http://fla.fg-a.com/flags/canadian-flag-large.png
+
+#EXTINF:0,TSN 1 alt link
+http://4.31.30.159:9082
+#EXTINF:0,TSN 2 alt link
+http://4.31.30.159:9083
+#EXTINF:0,TSN 3 alt link
+http://4.31.30.159:9084
+#EXTINF:0,TSN 4 alt link
+http://4.31.30.159:9085
+#EXTINF:0,TSN 5 alt link
+http://4.31.30.159:9086
+#EXTINF:0,Sportsnet
+http://4.31.30.159:9110
+#EXTINF:0,Sportsnet World
+http://4.31.30.159:9111/
+#EXTINF:0,TVO Kids
+http://4.31.30.159:9008/
+#EXTINF:0,ABC Family
+http://4.31.30.159:9072/
+#EXTINF:0,Treehouse
+http://4.31.30.159:9091/
+#EXTINF:0,Teletoon
+http://supertv.gq/toonf/2620.m3u8
+#EXTINF:0,Animal Planet
+http://4.31.30.159:9045/
+#EXTINF:0,Nickelodeon (French)
+http://4.31.30.159:9019/
+#EXTINF:0,Discovery
+http://4.31.30.159:9021/
+#EXTINF:0,Food Network Canada
+http://4.31.30.159:9028/
+#EXTINF:0,CTV Toronto
+http://4.31.30.159:9031/
+#EXTINF:0,History Canada
+http://4.31.30.159:9035/
+#EXTINF:0,CBC Newsworld
+http://4.31.30.159:9036/
+#EXTINF:0,Spike
+http://4.31.30.159:9015/
+#EXTINF:0,AMC
+http://4.31.30.159:9038/
+#EXTINF:0,A&E
+http://4.31.30.159:9039/
+#EXTINF:0,Global Toronto
+http://4.31.30.159:9041/
+#EXTINF:0,HGTV
+http://4.31.30.159:9046/
+#EXTINF:0,VH1
+http://4.31.30.159:9004/
+#EXTINF:0,OMNI
+http://4.31.30.159:9062/
+#EXTINF:0,Investigation Discovery
+http://4.31.30.159:9074/
+#EXTINF:0,CP24
+http://4.31.30.159:9087/
+#EXTINF:0,CTV News Toronto
+http://4.31.30.159:9088/
+#EXTINF:0,Slice
+http://4.31.30.159:9090/
+#EXTINF:0,TLC
+http://4.31.30.159:9101/
+#EXTINF:0,Bravo
+http://4.31.30.159:9109/
+#EXTINF:0,TVI
+http://4.31.30.159:9052/
+#EXTINF:0,Hollywood
+http://4.31.30.159:9133/
+#EXTINF:0,Motors TV
+http://4.31.30.159:9134/
+#EXTINF:0,Rai Sport
+http://4.31.30.159:9080/
+#EXTINF:0,Rai 3
+http://4.31.30.159:9081/
+#EXTINF:0,Eurosport 2 (French)
+http://4.31.30.159:9023/
+#EXTINF:0,Cielo (French)
+http://4.31.30.159:9024/
+#EXTINF:0,Cine Mundo (French)
+http://4.31.30.159:9037/
+
+
