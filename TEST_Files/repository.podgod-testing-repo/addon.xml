@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="repository.podgod-testing-repo" name="podgod repo - TEST" version="1.2" provider-name="podgod">
+<addon id="repository.podgod-testing-repo" name="podgod repo - TEST" version="1.3" provider-name="podgod">
 	<extension point="xbmc.addon.repository" name="PodGod Addon Repository">
-		<info compressed="false">http://podgod.webege.com/Repo/My-Repo/TEST_Files/addons.xml</info>
-		<checksum>http://podgod.webege.com/Repo/My-Repo/TEST_Files/addons.xml.md5</checksum>
-		<datadir zip="true">http://podgod.webege.com/Repo/My-Repo/TEST_Files/zips</datadir>
+		<info compressed="false">https://github.com/podgod/podgod/raw/master/TEST_Files/addons.xml</info>
+		<checksum>https://github.com/podgod/podgod/raw/master/TEST_Files/addons.xml.md5</checksum>
+		<datadir zip="true">http://github.com/podgod/podgod/raw/master/TEST_Files/zips</datadir>
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<summary>Install My Addons</summary>
