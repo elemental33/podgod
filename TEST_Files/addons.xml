@@ -190,6 +190,23 @@
   </extension>
 </addon>
 
+<addon id="plugin.video.stalkerunlocked" name="IPTV Stalker UNLOCKED" version="0.1" provider-name="podgod">
+    <requires>
+		<import addon="xbmc.python" version="2.14.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.service" library="server.py" start="startup" />
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<summary lang="en">IPTV Stalker</summary>
+		<description lang="en">IPTV Stalker. Do not redistribute. For private use only!!!</description>
+		<license>GNU General Public License, v2</license>
+		<language></language>
+	</extension>
+</addon>
+
 <addon id="repository.podgod-testing-repo" name="podgod repo - TEST" version="1.3" provider-name="podgod">
 	<extension point="xbmc.addon.repository" name="PodGod Addon Repository">
 		<info compressed="false">https://github.com/podgod/podgod/raw/master/TEST_Files/addons.xml</info>
