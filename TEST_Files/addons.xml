@@ -131,6 +131,36 @@
   </extension>
 </addon>
 
+<addon id="plugin.video.GameDay"
+       name="GameDay"
+       version="0.1"
+       provider-name="podgod">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.beautifulsoup" version="3.2.1"/>
+    <import addon="script.module.simple.downloader" version="0.9.4"/>
+    <import addon="script.module.beautifulsoup4" />
+    <import addon="script.module.simple.downloader" version="0.9.4"/>
+    <import addon="script.module.requests" />
+    <import addon="script.module.httplib2" />
+    <import addon="script.module.youtube.dl" optional="true"/>
+    <import addon="plugin.video.youtube" />
+    <import addon="script.module.urlresolver" optional="true"/>
+    <import addon="script.module.simplejson" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>Watch The game here live!</summary>
+    <description>
+	Watch The game here live! I take no responsibility for the content. These are links found freely on the net. Enjoy!
+
+    </description>
+    <platform>all</platform>
+  </extension>
+</addon>
+
 <addon id="plugin.video.heynow"
 	name="Howard Stern"
 	version="1.7"
