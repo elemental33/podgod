@@ -98,7 +98,7 @@
 
 <addon id="plugin.video.GameDay"
        name="GameDay"
-       version="0.1"
+       version="0.3"
        provider-name="podgod">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -117,9 +117,9 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary>Watch The game here live!</summary>
+    <summary>This addon is dead. DO NOT INSTALL</summary>
     <description>
-	Watch The game here live! I take no responsibility for the content. These are links found freely on the net. Enjoy!
+	I tested this for the preseason, and it worked great. Yesterday, everything changed. [B]This addon is now dead![/B] I will be removing this from the repo soon. IPTV sucks sometimes! Sorry I wasted your time, [B]please uninstall.[/B]
 
     </description>
     <platform>all</platform>

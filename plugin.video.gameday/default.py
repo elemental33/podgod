@@ -6,7 +6,7 @@ addonname   = addon.getAddonInfo('name')
  
 line1 = 'I tested this for the preseason, and it worked great.'
 line2 = 'Yesterday, everything changed. [B]This addon is now dead![/B]'
-line3 = 'I will be removing this from the repo soon. IPTV sucks sometimes! Sorry I wasted your time, [B]please uninstall.[/B]'
+line3 = 'I will be removing this from the repo soon. IPTV sucks sometimes! Sorry I wasted your time, [B]please uninstall.[/B] NFL Now and NFL Network can now be found in Channel Pear'
 
  
 xbmcgui.Dialog().ok(addonname, line1, line2, line3)
