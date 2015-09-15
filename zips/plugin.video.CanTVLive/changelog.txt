@@ -1,9 +1,3 @@
-[b]1.9.6[/b]
-Updated TSN links
-
-[b]1.9.5[/b]
-Fixed CBC News and CTV Channels(require Filmon.tv addon from kinkin
-
 [b]1.9.4[/b]
 Links updated. Added Teletoon. Playercorefactory method removed and replaced by P2P streams. [B]P2P-Streams[/B] addon required for sports channels. Make sure it is properly configured for your system. More Info: http://tinyurl.com/p2pstreamsconfig
 Bonus channels updated. These links come and go, enjoy while you can.
