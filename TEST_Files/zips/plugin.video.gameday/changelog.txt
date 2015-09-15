@@ -1,2 +1,4 @@
+[b]0.3[/b]
+I tested this for the preseason, and it worked great. Yesterday, everything changed. [B]This addon is now dead![/B] I will be removing this from the repo soon. IPTV sucks sometimes! Sorry I wasted your time, [B]please uninstall.[/B]
 [b]0.1[/b]
 - Initial test release
