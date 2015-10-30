@@ -26,10 +26,15 @@ from xbmcswift2 import Plugin
 
 RSS_FEEDS = (
     {
-        'title': 'Main Shows',
+        'title': 'Archived Shows',
         'logo': 'stern.png',
-        'stream_url': ('rss://kingofallmedia.s3.amazonaws.com/daily/daily.xml'),
+        'stream_url': ('rss://davidstoll.net/Howard%20Stern/hs.xml'),
     },
+	{
+        'title': '[COLOR blue]Listen Live![/COLOR]',
+        'logo': 'stern.png',
+        'stream_url': ('http://davidstoll.net/HS.pls'),
+    }
 )
 
 
@@ -53,3 +58,6 @@ def get_logo(logo):
 
 if __name__ == '__main__':
     plugin.run()
+
+
+xbmcplugin.endOfDirectory(int(sys.argv[1]))
