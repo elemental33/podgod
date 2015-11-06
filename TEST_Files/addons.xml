@@ -180,6 +180,36 @@
   </extension>
 </addon>
 
+<addon id="plugin.video.HockeyLive"
+       name="Hockey Live"
+       version="0.0.2"
+       provider-name="podgod">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.beautifulsoup" version="3.2.1"/>
+    <import addon="script.module.simple.downloader" version="0.9.4"/>
+    <import addon="script.module.beautifulsoup4" />
+    <import addon="script.module.simple.downloader" version="0.9.4"/>
+    <import addon="script.module.requests" />
+    <import addon="script.module.httplib2" />
+    <import addon="script.module.youtube.dl" optional="true"/>
+    <import addon="plugin.video.youtube" />
+    <import addon="script.module.urlresolver" optional="true"/>
+    <import addon="script.module.simplejson" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>Live games from the AHL, OHL, WHL, QMJHL, ECHL and SPHL</summary>
+    <description>
+
+
+    </description>
+    <platform>all</platform>
+  </extension>
+</addon>
+
 <addon
     id="plugin.video.INIBuilder"
     version="0.0.1"

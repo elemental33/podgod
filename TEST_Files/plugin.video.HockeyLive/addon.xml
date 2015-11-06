@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.ccloudtv"
-       name="cCloud TV"
-       version="1.3.3"
+<addon id="plugin.video.HockeyLive"
+       name="Hockey Live"
+       version="0.0.2"
        provider-name="podgod">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -20,14 +20,11 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary>All the best from cCloud TV</summary>
+    <summary>Live games from the AHL, OHL, WHL, QMJHL, ECHL and SPHL</summary>
     <description>
-	[COLOR yellow]http://ccloudtv.org[/COLOR] cCloud Popcorntime for LIVE TV, an open source project. Just click, play and stream because IPTV just got simple and easy :)
+	
+        
     </description>
-	<license>http://www.gnu.org/licenses/</license>
-    <forum>http://ccloudtv.org/forum</forum>
-    <website>http://ccloudtv.org</website>
-    <email></email>
     <platform>all</platform>
   </extension>
 </addon>
