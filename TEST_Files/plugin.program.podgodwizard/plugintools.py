@@ -1,4 +1,21 @@
-# Special thanks to whufclee for the original Community Builds code used in this add-on
+# -*- coding: utf-8 -*-
+#------------------------------------------------------------
+# Plugin Tools v1.0.1
+#------------------------------------------------------------
+# License: GPL (http://www.gnu.org/licenses/gpl-3.0.html)
+# Based on code from youtube and parsedom addons
+# Author: 
+# tvalacarta@gmail.com
+# http://www.mimediacenter.info/plugintools
+#------------------------------------------------------------
+# Changelog:
+# 1.0.0
+# - First release
+# 1.0.1
+# - If find_single_match can't find anything, it returns an empty string
+# - Remove addon id from this module, so it remains clean
+#------------------------------------------------------------
+
 import xbmc
 import xbmcplugin
 import xbmcaddon

@@ -1,22 +1,20 @@
-# Special thanks to whufclee for the original Community Builds code used in this add-on
-
 import xbmcgui
 import urllib
 
-def download(url, dest, dp = None):
-    if not dp:
-        dp = xbmcgui.DialogProgress()
-        dp.create("podgod...Maintenance","Downloading & Copying File",' ', ' ')
-    dp.update(0)
-    urllib.urlretrieve(url,dest,lambda nb, bs, fs, url=url: _pbhook(nb,bs,fs,url,dp))
+def download(url, dest, dialogprocess = None):
+    if not dialogprocess:
+        dialogprocess = xbmcgui.DialogProgress()
+        dialogprocess.create("PodGod Wizard","Downloading & Installing File",' ', ' ')
+    dialogprocess.update(0)
+    urllib.urlretrieve(url,dest,lambda nb, bs, fs, url=url: _pbhook(nb,bs,fs,url,dialogprocess))
  
-def _pbhook(numblocks, blocksize, filesize, url, dp):
+def _pbhook(numblocks, blocksize, filesize, url, dialogprocess):
     try:
         percent = min((numblocks*blocksize*100)/filesize, 100)
-        dp.update(percent)
+        dialogprocess.update(percent)
     except:
         percent = 100
-        dp.update(percent)
-    if dp.iscanceled(): 
+        dialogprocess.update(percent)
+    if dialogprocess.iscanceled(): 
         raise Exception("Canceled")
-        dp.close()
+        dialogprocess.close()

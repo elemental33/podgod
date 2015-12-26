@@ -1,10 +1,8 @@
-# Special thanks to whufclee for the original Community Builds code used in this add-on
-
 import zipfile
 
-def all(_in, _out, dp=None):
-    if dp:
-        return allWithProgress(_in, _out, dp)
+def all(_in, _out, dialogprocess=None):
+    if dialogprocess:
+        return allWithProgress(_in, _out, dialogprocess)
 
     return allNoProgress(_in, _out)
         
@@ -20,7 +18,7 @@ def allNoProgress(_in, _out):
     return True
 
 
-def allWithProgress(_in, _out, dp):
+def allWithProgress(_in, _out, dialogprocess):
 
     zin = zipfile.ZipFile(_in,  'r')
 
@@ -31,7 +29,7 @@ def allWithProgress(_in, _out, dp):
         for item in zin.infolist():
             count += 1
             update = count / nFiles * 100
-            dp.update(int(update))
+            dialogprocess.update(int(update))
             zin.extract(item, _out)
     except Exception, e:
         print str(e)
