@@ -440,12 +440,11 @@ def Rawstreams(home, away, orig_title):
 		if id:
 			links = ['http://rawstreams.com/international.php?id='+id+'&feed=home', 'http://rawstreams.com/international.php?id='+id+'&feed=away', 'http://rawstreams.com/american.php?id='+id+'&feed=home', 'http://rawstreams.com/american.php?id='+id+'&feed=away']
 			for link in links:
-				print link
 				hmaw = ' '
 				if 'home' in link:
-					hmaw = ' home '
+					hmaw = ' - H '
 				elif 'away' in link:
-					hmaw = ' away '
+					hmaw = ' - A '
 				i=0
 				while i<3:
 					html = GetURL(link)
@@ -463,11 +462,11 @@ def Rawstreams(home, away, orig_title):
 								time_exp = datetime.fromtimestamp(int(timest)).strftime(xbmc.getRegion('time').replace('%H%H','%H').replace(':%S',''))
 							except:
 								time_exp = ''
-							addDirectLink('Turner HD' +hmaw+ '(external player) link expires '+time_exp, {'Title': orig_title}, url)
+							addDirectLink('Turner HD' +hmaw+ '- (external player) link expires '+time_exp, {'Title': orig_title}, url)
 							break
 						elif 'neulion' in url:
 							url = url +'|User-Agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
-							addLink('Rawstream'+hmaw, orig_title, url, mode="PLAY")
+							addLink('Rawstream'+hmaw+'- donate to streamer: [COLOR yellow]rawstreams.com/donations.html[/COLOR]', orig_title, url, mode="PLAY")
 							break
 						else:
 							i=i+1
@@ -584,15 +583,17 @@ def Gstreams(url):
 		if 'gstreams.tv' in link:
 			html  = GetURL(link)
 			link = html.split('https://')[1]
-			link = link.split("'")[0]
+			link = link.split('",')[0]
 			link = 'https://' + link 
 			return link
-		elif 'streamup.com' in link:
+		elif 'streamup.com' in link and 'm3u8' not in link:
 			channel = link.split('/')[3]
 			link = GetStreamup(channel)
 			return link
 		elif 'youtu' in link:
 			link = GetYoutube(link)
+			return link
+		elif 'm3u8' in link:
 			return link
 	except:
 		return None
@@ -680,7 +681,7 @@ def Ducking(url):
 def Streamarena(url):
 	try:
 		html = GetURL(url)
-		link = common.parseDOM(html, "iframe",  ret="src")[1]
+		link = common.parseDOM(html, "iframe",  ret="src")[0]
 		link = link.replace('..','http://www.streamsarena.eu/')
 		html  = GetURL(link)
 		link = common.parseDOM(html, "iframe",  ret="src")[0]

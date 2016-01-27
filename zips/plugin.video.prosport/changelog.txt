@@ -62,3 +62,8 @@ ver 0.19:
 	
 ver 0.20:
 	- fixed rawstreams
+	
+ver 0.21:
+	- fixed gsrteam
+	- fixed streamarena
+	- added rawstreams donation link
