@@ -64,6 +64,7 @@ def utc_to_local(utc_dt):
     return local_dt.replace(microsecond=utc_dt.microsecond)
 
 def GetURL(url, referer=None):
+    url = url.replace('///','//')
     request = urllib2.Request(url)
     request.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
     if referer:
@@ -271,6 +272,11 @@ def getStreams(ur, home, away):
 				if url and url not in urls:
 					addLink('Nfl-watch.com', orig_title, url, mode="PLAY")
 					urls.append(url)
+			elif 'zona4vip.com' in el and show_sd=='true':
+				url = Zona4vip(el)
+				if url and url not in urls:
+					addLink('Zona4vip (SD)', orig_title, url, mode="PLAY")
+					urls.append(url)
 			elif 'ducking.xyz' in el:
 				url = Ducking(el)
 				if url and url not in urls:
@@ -303,6 +309,9 @@ def getStreams(ur, home, away):
 				if url and url not in urls:
 					addLink('101livesportsvideos.com', orig_title, url, mode="PLAY")
 					urls.append(url)
+		
+		if 'nba' in ur:
+			Hehestreams(home_f, away_f, orig_title)
 				
 	else:
 		addDir("[COLOR=FFFF0000]Could not find game on reddit[/COLOR]", '', iconImg="", mode="")
@@ -427,6 +436,33 @@ def Blabseal(url):
 		return link
 	except:
 		return None
+		
+def Hehestreams(home, away, orig_title):
+	try:
+		import cfscrape
+		scraper = cfscrape.create_scraper()
+		html = scraper.get("http://hehestreams.tk/").content
+		titles = common.parseDOM(html, "a", attrs={"class": "row"})
+		links = common.parseDOM(html, "a", attrs={"class": "row"}, ret="href")
+		for title in titles:
+			if home.lower() in title.lower() and away.lower() in title.lower():
+				link = links[titles.index(title)]
+				link = "http://hehestreams.tk"+link
+				html = scraper.get(link).content
+				titles = common.parseDOM(html, "label")
+				links = common.parseDOM(html, "input", ret="value")
+				for link in links:
+					title = titles[links.index(link)]
+					if 'turner' in link:
+						try:
+							timest = link.split("exp=")[-1].split("~acl")[0]
+							time_exp = datetime.fromtimestamp(int(timest)).strftime(xbmc.getRegion('time').replace('%H%H','%H').replace(':%S',''))
+						except:
+							time_exp = ''
+						addDirectLink(title+ ' - (external player) link expires '+time_exp, {'Title': orig_title}, link)
+	except:
+		pass		
+	
 		
 def Oneapp(url):
 	try:
@@ -577,6 +613,39 @@ def Nflwatch(url):
 				return link
 			else:
 				continue
+		if 'p2pcast.tv' in html:
+			agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36'
+			id = html.split("'text/javascript'>id='")[-1]
+			id = id.split("';")[0]
+			url = 'http://p2pcast.tv/stream.php?id='+id+'&live=0&p2p=0&stretching=uniform'
+			request = urllib2.Request(url)
+			request.add_header('User-Agent', agent)
+			request.add_header('Referer', url)
+			response = urllib2.urlopen(request)
+			html = response.read()
+			token = html.split('murl = "')[1].split('";')[0]
+			link = base64.b64decode(token)
+			request = urllib2.Request('http://p2pcast.tv/getTok.php')
+			request.add_header('User-Agent', agent)
+			request.add_header('Referer', url)
+			request.add_header('X-Requested-With', 'XMLHttpRequest')
+			response = urllib2.urlopen(request)
+			html = response.read()
+			js = json.loads(html)
+			tkn = js['token']
+			link = link+tkn
+			link = link + '|User-Agent='+agent+'&Referer='+url
+			return link
+	except:
+		return None
+		
+def Zona4vip(url):
+	try:
+		html = GetURL(url)
+		link = common.parseDOM(html, "iframe",  ret="src")[0].replace('/live','')
+		html = GetURL('http://www.zona4vip.com/'+link)
+		link = common.parseDOM(html, "iframe",  ret="src")[0]
+		html = GetURL(link)
 		if 'p2pcast.tv' in html:
 			agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36'
 			id = html.split("'text/javascript'>id='")[-1]

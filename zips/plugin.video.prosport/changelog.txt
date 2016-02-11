@@ -76,3 +76,8 @@ ver 0.22:
 ver 0.23:
 	- removed rawstreams (site is closed and just delays streams finding)
 	- fixed fake m3u link appears in streams
+	
+ver 0.24:
+	- fixed nbastream.net and nhlstream.net
+	- added hehestream.tk for nba (plays only in external player)
+	- added zone more SD stream source
