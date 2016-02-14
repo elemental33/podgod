@@ -438,30 +438,36 @@ def Blabseal(url):
 		return None
 		
 def Hehestreams(home, away, orig_title):
-	try:
-		import cfscrape
-		scraper = cfscrape.create_scraper()
-		html = scraper.get("http://hehestreams.tk/").content
+	try:	
+		html = GetURL("http://hehestreams.xyz/")
 		titles = common.parseDOM(html, "a", attrs={"class": "row"})
 		links = common.parseDOM(html, "a", attrs={"class": "row"}, ret="href")
 		for title in titles:
 			if home.lower() in title.lower() and away.lower() in title.lower():
 				link = links[titles.index(title)]
-				link = "http://hehestreams.tk"+link
-				html = scraper.get(link).content
+				link = "http://hehestreams.xyz"+link
+				html = GetURL(link)
 				titles = common.parseDOM(html, "label")
-				links = common.parseDOM(html, "input", ret="value")
-				for link in links:
-					title = titles[links.index(link)]
-					if 'turner' in link:
+				lnks = common.parseDOM(html, "input", ret="value")
+				for lnk in lnks:
+					title = titles[lnks.index(lnk)]
+					if 'turner' in lnk:
 						try:
-							timest = link.split("exp=")[-1].split("~acl")[0]
+							timest = lnk.split("exp=")[-1].split("~acl")[0]
 							time_exp = datetime.fromtimestamp(int(timest)).strftime(xbmc.getRegion('time').replace('%H%H','%H').replace(':%S',''))
 						except:
 							time_exp = ''
-						addDirectLink(title+ ' - (external player) link expires '+time_exp, {'Title': orig_title}, link)
+						addDirectLink(title+ ' - (external player) link expires '+time_exp, {'Title': orig_title}, lnk)
+				link = link.replace('games', 'backup')
+				html = GetURL(link)
+				lnks = common.parseDOM(html, "option", ret="value")
+				for lnk in lnks:
+					title = titles[lnks.index(lnk)]
+					if 'neulion' in lnk:
+						lnk = lnk.replace('amp;','')
+						addLink('Neulion - '+title, orig_title, lnk, mode="PLAY")
 	except:
-		pass		
+		pass	
 	
 		
 def Oneapp(url):
