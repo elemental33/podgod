@@ -4,21 +4,11 @@ THANK YOU FOR CHOOSING PGTV!
 
 This private build is completely FREE, not meant to be sold in any kinds or shape... if you paid for anything it means you have been ripped off and should ask for a refund! Do not distribute this build to anyone. It is tied to your IP and will work only on your system. 
 
-Some recommended tips to make your experience better...
-
-- Set up free accounts filmon, USTVnow, Trakt, IMDB and VK.com. The android apps 0-IPTV and Caststreams need to be set up with accounts as well(These are free and completely optional).
-
-Other useful accounts (paid)
-- Real Debrid, VPN(PIA), Netflix
-
+Some recommended tips to make your experience better - Set up free accounts filmon, USTVnow, Trakt, IMDB and VK.com. The android apps 0-IPTV and Caststreams need to be set up with accounts as well(These are free and completely optional).
+Other useful accounts (paid) - Real Debrid, VPN(PIA), Netflix
 If you're unsure what a service is... google it :)
 
-I am not associated with Kodi in any way or form, this is just a custom configuration to help people enjoy
-the full Kodi experience. Feel free to modify it to your liking.
-
-Please let the Build load up all the contents and images at first start, or you may experience
-some problems.
-
-Thanks to your support and enjoy!
+I am not associated with Kodi in any way or form, this is just a custom configuration to help people enjoy the full Kodi experience. Feel free to modify it to your liking. Also, please let the Build load up all the contents and images at first start, or you may experience
+some problems. Thanks to your support and enjoy!
 
 PG
