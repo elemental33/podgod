@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="context.playlist.Add2INI" name="Add 2 INI" version="0.0.1" provider-name="podgod">
+    <requires>
+        <import addon="xbmc.python" version="2.20.0" />
+    </requires>
+    <extension point="kodi.context.item" library="addon.py">
+        <item>
+            <label>[COLOR yellow]TV Guide[/COLOR] Add to Addon INI</label>
+            <visible>Container.Content(episodes) | Container.Content(movies) | Container.Content(songs) | Container.Content(musicvideos)| Container.Content(Playlists)</visible>
+        </item>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Add channels to your TV Guide.</summary>
+        <description lang="en">Add channels to an existing or new INI file for use in your TV Guide. Choose between iVue, Renegades or the original TV Guide from Twinther</description>
+        <platform>all</platform>
+        <license>GNU General Public License, v2</license>
+        <email></email>
+    </extension>
+</addon>
