@@ -87,3 +87,13 @@ ver 0.25:
 	
 ver 0.26:
 	- added another stream source from hehestreams
+	
+ver 0.27:
+	- fixed Hehestreams (Turner HD (plays only in external player) and Neulion streams for NBA)
+	
+ver 0.28:
+	- added expiration time to neulion in hehestreams
+	
+ver 0.29:
+	- added praw for reddit parsing (thanks to rsummers618!!!)
+	- fixed nbastream, nhlstream links 

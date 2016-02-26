@@ -1,9 +1,0 @@
-*.lwp
-*.pyc
-.settings
-pysrc/
-cache/*
-.project
-.pydevproject
-xbmcstubs/*
-/xbmcstubs/

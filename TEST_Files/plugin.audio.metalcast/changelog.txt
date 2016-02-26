@@ -1,2 +1,0 @@
-v1.0 (Mar 2015) :
-  - Initial test release

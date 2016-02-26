@@ -41,6 +41,8 @@ from datetime import datetime, timedelta
 import json
 import calendar, time
 import CommonFunctions
+import praw
+from threadWithReturn import threadWithReturn
 common = CommonFunctions
 
 __addon__ = xbmcaddon.Addon('plugin.video.prosport')
@@ -50,6 +52,7 @@ display_score = __addon__.getSetting('score')
 display_status = __addon__.getSetting('status')
 display_start_time = __addon__.getSetting('start_time')
 show_sd = __addon__.getSetting('showsd')
+show_hehe = __addon__.getSetting('showhehe')
 
 logos ={'nba':'http://bethub.org/wp-content/uploads/2015/09/NBA_Logo_.png',
 'nhl':'https://upload.wikimedia.org/wikipedia/de/thumb/1/19/Logo-NHL.svg/2000px-Logo-NHL.svg.png',
@@ -70,7 +73,7 @@ def GetURL(url, referer=None):
     if referer:
     	request.add_header('Referer', referer)
     try:
-    	response = urllib2.urlopen(request, timeout=5)
+    	response = urllib2.urlopen(request, timeout=10)
     	html = response.read()
     	return html
     except:
@@ -114,7 +117,6 @@ def GameStatus(status):
 	else: return ''	
 	
 def Games(mode):
-	GAMEURL = 'https://www.reddit.com/r/'+mode+'streams'
 	today = datetime.utcnow() - timedelta(hours=8)
 	today_from = str(today.strftime('%Y-%m-%d'))+'T00:00:00.000-05:00'
 	today_to = str(today.strftime('%Y-%m-%d'))+'T23:59:00.000-05:00'
@@ -162,7 +164,7 @@ def Games(mode):
 				title = title+'[COLOR=FFFF0000]'+status+'[/COLOR]'
 			if display_score=='true':
 				title = title+'[COLOR=FF00FFFF]'+score+'[/COLOR]'
-			addDir(title, GAMEURL, iconImg=logos[mode], home=home, away=away, mode="STREAMS")
+			addDir(title, mode, iconImg=logos[mode], home=home, away=away, mode="STREAMS")
 	else:
 		addDir("[COLOR=FFFF0000]Could not fetch today's "+mode.upper()+" games... Probably no games today?[/COLOR]", '', iconImg="", mode="")
 	xbmcplugin.endOfDirectory(h, cacheToDisc=True)
@@ -171,27 +173,34 @@ def getStreams(ur, home, away):
 	orig_title = '[COLOR=FF00FF00][B]'+away+' at '+home+'[/B][/COLOR]'
 	if 'redzone' in orig_title:
 		orig_title = '[COLOR=FF00FF00][B]NFL Redzone[/B][/COLOR]'
-	html = GetURL(ur)
-	links = common.parseDOM(html, "a", attrs={"class": "title may-blank "}, ret="href")
-	titles = common.parseDOM(html, "a", attrs={"class": "title may-blank "})
 	home_f = home.lower().split()[0]
 	away_f = away.lower().split()[0]
 	home_l = home.lower().split()[-1]
 	away_l = away.lower().split()[-1]
-	link = None	
-	for element in titles:
-		if (home_f in element.lower() and (away_l in element.lower() or away_f in element.lower())) or (home_l in element.lower() and (away_l in element.lower() or away_f in element.lower())):
-			link = links[titles.index(element)]
-			link = 'https://reddit.com'+link
-			break
-		else:
+	r = praw.Reddit(user_agent='xbmc pro sport addon')
+	r.config.api_request_delay = 0
+	links=[]
+	for submission in r.get_subreddit(ur+'streams').get_hot(limit=30):
+		if not home_l in submission.title.lower() and not away_l in submission.title.lower():
 			continue
-	if link:
-		html = GetURL(link)
-		content = common.parseDOM(html, "a", ret="href")
-		cont = common.parseDOM(html, "p")
+		flat_comments = praw.helpers.flatten_tree(submission.comments)
+		for comment in flat_comments:
+			if not isinstance(comment,praw.objects.Comment):
+				flat_comments.remove(comment)
+		flat_comments.sort(key=lambda comment: comment.score , reverse=True)
+		for comment in flat_comments:
+			regex = re.compile(r'([-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?)',re.IGNORECASE)
+			link = re.findall(regex, comment.body)
+			links = links + link
+	if links:
+		if 'nba' in ur and show_hehe=='true':
+			twrb = threadWithReturn(target=Hehestreams, args=(home_f, away_f, orig_title,))
+			twrb.start()
 		urls = []
-		for el in content:
+		for el in links:
+			el = el[0]
+			if 'http://' not in el and 'https://' not in el:
+				el = 'http://'+el
 			if 'blabseal.com' in el:
 				url = Blabseal(el)
 				if url and url not in urls:
@@ -211,6 +220,11 @@ def getStreams(ur, home, away):
 				url = Freecastin(el)
 				if url and url not in urls:
 					addLink('Freecast.in', orig_title, url, mode="PLAY")
+					urls.append(url)
+			elif 'streamsus.com' in el:
+				url = Streamsus(el)
+				if url and url not in urls:
+					addLink('Streamsus.com', orig_title, url, mode="PLAY")
 					urls.append(url)
 			elif 'streamboat.tv' in el:
 				url = Streambot(el)
@@ -303,20 +317,33 @@ def getStreams(ur, home, away):
 					addLink('M3U8 stream', orig_title, url, mode="PLAY")
 					urls.append(url)
 		
-		for el in cont:
-			if '101livesportsvideos.com' in el and 'SD' not in el and 'ace' not in el:
-				url = Livesports101(el)
-				if url and url not in urls:
-					addLink('101livesportsvideos.com', orig_title, url, mode="PLAY")
-					urls.append(url)
-		
-		if 'nba' in ur:
-			Hehestreams(home_f, away_f, orig_title)
+		if 'nba' in ur and show_hehe=='true':
+			links = twrb.join()
+			if links:
+				for lnk in links:
+					if 'turner' in lnk:
+						try:
+							timest = lnk.split("exp=")[-1].split("~acl")[0]
+							time_exp = datetime.fromtimestamp(int(timest)).strftime(xbmc.getRegion('time').replace('%H%H','%H').replace(':%S',''))
+						except:
+							time_exp = ''
+						addDirectLink('Turner - (external player) link expires '+time_exp, {'Title': orig_title}, lnk)
+					elif 'neulion' in lnk:
+						lnk = lnk.replace('amp;','')
+						try:
+							timest = lnk.split("expires%3D")[-1].split("%7E")[0]
+							time_exp = datetime.fromtimestamp(int(timest)).strftime(xbmc.getRegion('time').replace('%H%H','%H').replace(':%S',''))
+						except:
+							time_exp = ''
+						addDirectLink('Neulion link expires '+time_exp, {'Title': orig_title}, lnk)
 				
 	else:
 		addDir("[COLOR=FFFF0000]Could not find game on reddit[/COLOR]", '', iconImg="", mode="")
 	xbmcplugin.endOfDirectory(h, cacheToDisc=True)
 
+def strip_non_ascii(string):
+    stripped = (c for c in string if 0 < ord(c) < 127)
+    return ''.join(stripped)
 
 def Archive(page, mode):
 	if mode == 'mlbarch':
@@ -333,6 +360,8 @@ def Archive(page, mode):
 		if '-nba-' in el or '-nfl-' in el:
 			title = common.parseDOM(html, "a", attrs={"href": el}, ret="title")[0]
 			title = title.split('/')[-1]+' - '+title.split('/')[len(title.split('/'))-2]
+			title = strip_non_ascii(title)
+			title = title.replace('&#8211;','').strip()
 			addDir(title, el, iconImg="", mode="playarchive")
 	uri = sys.argv[0] + '?mode=%s&page=%s' % (mode, str(int(page)+1))
 	item = xbmcgui.ListItem("next page...", iconImage='', thumbnailImage='')
@@ -387,7 +416,7 @@ def GetStreamup(channel):
 		if chan['channel']['live']:
 			videoId = chan['channel']['capitalized_slug'].lower()
 			domain = GetURL('https://lancer.streamup.com/api/redirect/'+videoId)
-			return 'https://'+domain+'/app/'+videoId+'/playlist.m3u8'
+			return 'https://'+domain+'/app/'+videoId+'_aac/playlist.m3u8'
 	except:
 		return None	
 
@@ -438,36 +467,19 @@ def Blabseal(url):
 		return None
 		
 def Hehestreams(home, away, orig_title):
-	try:	
+	try:
 		html = GetURL("http://hehestreams.xyz/")
-		titles = common.parseDOM(html, "a", attrs={"class": "row"})
-		links = common.parseDOM(html, "a", attrs={"class": "row"}, ret="href")
+		titles = common.parseDOM(html, "a", attrs={"class": "results-link"})
+		links = common.parseDOM(html, "a", attrs={"class": "results-link"}, ret="href")
 		for title in titles:
 			if home.lower() in title.lower() and away.lower() in title.lower():
 				link = links[titles.index(title)]
 				link = "http://hehestreams.xyz"+link
 				html = GetURL(link)
-				titles = common.parseDOM(html, "label")
-				lnks = common.parseDOM(html, "input", ret="value")
-				for lnk in lnks:
-					title = titles[lnks.index(lnk)]
-					if 'turner' in lnk:
-						try:
-							timest = lnk.split("exp=")[-1].split("~acl")[0]
-							time_exp = datetime.fromtimestamp(int(timest)).strftime(xbmc.getRegion('time').replace('%H%H','%H').replace(':%S',''))
-						except:
-							time_exp = ''
-						addDirectLink(title+ ' - (external player) link expires '+time_exp, {'Title': orig_title}, lnk)
-				link = link.replace('games', 'backup')
-				html = GetURL(link)
 				lnks = common.parseDOM(html, "option", ret="value")
-				for lnk in lnks:
-					title = titles[lnks.index(lnk)]
-					if 'neulion' in lnk:
-						lnk = lnk.replace('amp;','')
-						addLink('Neulion - '+title, orig_title, lnk, mode="PLAY")
+				return lnks
 	except:
-		pass	
+		return None	
 	
 		
 def Oneapp(url):
@@ -492,6 +504,15 @@ def Freecastin(url):
 	try:
 		html = GetURL(url)
 		block_content = common.parseDOM(html, "iframe", attrs={"width": "100%"}, ret="src")[0]
+		link = GetYoutube(block_content)
+		return link
+	except:
+		return None
+		
+def Streamsus(url):
+	try:
+		html = GetURL(url)
+		block_content = common.parseDOM(html, "iframe", ret="src")[0]
 		link = GetYoutube(block_content)
 		return link
 	except:

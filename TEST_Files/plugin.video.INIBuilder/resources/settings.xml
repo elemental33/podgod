@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <category label="32000">
-        <setting label="32004" type="folder" id="INI_LOC" source="auto" default="special://userdata/addon_data/plugin.video.INIBuilder"/>
-	</category>
-</settings>
