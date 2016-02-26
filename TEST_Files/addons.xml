@@ -39,6 +39,30 @@
     </extension>
 </addon>
 
+<addon id="plugin.program.pgtv.notifications" version="0.0.1"
+       name="PGTV Notifications" provider-name="tvaddons.ag modded by PodGod">
+  <requires>
+  	<import addon="xbmc.python" version="2.1.0"/>
+  	<import addon="script.module.addon.common" optional="true" />
+  </requires>
+  <extension point="xbmc.python.script" library="default.py">
+    <provides>executable</provides>
+  </extension>
+  <extension point="xbmc.service" library="service.py" start="startup">
+  </extension>
+  <extension point="xbmc.addon.metadata">
+  	<summary>PGTV NEWS</summary>
+  	<description>Receive Important Notifications.</description>
+  	<disclaimer>We take no responsibility for any problems this plugin might in any way, form, shape or size cause.</disclaimer>
+  	<language>en</language>
+  	<platform>all</platform>
+  	<forum>http://forums.tvaddons.ag/forum.php</forum>
+  	<website>http://www.tvaddons.ag/</website>
+  	<source></source>
+  	<email></email>
+  </extension>
+</addon>
+
 <addon id="plugin.program.podgodwizard" name="PodGod Wizard" version="1.1" provider-name="podgod">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -328,20 +352,6 @@
 		<description>Beta test unreleased addons and test versions from podgod</description>
 		<platform>all</platform>
 	</extension>
-</addon>
-
-<addon id="script.module.cygpfi" name="idTent Parser" version="5.0" provider-name="bytesize">
-  <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
-  </requires>
-  <extension point="xbmc.python.pluginsource" library="default.py">
-  </extension>
-  <extension point="xbmc.service" library="default.py" start="startup" />
-  <extension point="xbmc.addon.metadata">
-    <summary lang="en">important module do not delete</summary>
-	<description>important module do not delete</description>
-    <platform>all</platform>
-  </extension>
 </addon>
 
 <addon
