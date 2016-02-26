@@ -6,8 +6,8 @@ description="Install latest build. This can be up to 1 GB download, so it may ta
 
 name="Latest Update (v.4.4-Feb 06)"	
 url="https://archive.org/download/podgod/backup.zip"
-img="xbmc.translatePath(os.path.join(MainPath,'FanArt.png'))"
-fanart="http://i.imgur.com/TDiTtbA.jpg"
+img="special://addons/plugin.program.podgodwizard/resources/images/latest.png"
+fanart="https://raw.githubusercontent.com/podgod/podgod/master/TEST_Files/resources/latest.png"
 description="Install latest update. This can be up to 1 GB download, so it may take a while"
 
 ####="(3)Install TV Guide Setup"	
