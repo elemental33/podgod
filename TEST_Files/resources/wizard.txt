@@ -4,9 +4,9 @@ img="https://copy.com/YjZpjiRiudQnm9uV"
 fanart="http://i.imgur.com/TDiTtbA.jpg"
 description="Install latest build. This can be up to 1 GB download, so it may take a while"
 
-####="Latest Update (v.4.4-Feb 06)"	
+name="Latest Update (v.4.4-Feb 06)"	
 url="https://archive.org/download/podgod/backup.zip"
-img="https://copy.com/gjTuHn3ajNFlxXE3"
+img="xbmc.translatePath(os.path.join(MainPath,'FanArt.png'))"
 fanart="http://i.imgur.com/TDiTtbA.jpg"
 description="Install latest update. This can be up to 1 GB download, so it may take a while"
 
