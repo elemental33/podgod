@@ -126,7 +126,7 @@
   </extension>
 </addon>
 
-<addon id="plugin.video.prosport" name="Pro Sport" version="0.29" provider-name="gerikss, podgod">
+<addon id="plugin.video.prosport" name="Pro Sport" version="0.32" provider-name="gerikss, podgod">
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
      <import addon="script.module.requests" version="2.9.1" />

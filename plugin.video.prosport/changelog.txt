@@ -97,3 +97,12 @@ ver 0.28:
 ver 0.29:
 	- added praw for reddit parsing (thanks to rsummers618!!!)
 	- fixed nbastream, nhlstream links 
+	
+ver 0.30:
+	- added MLB
+	
+ver 0.31:
+	- fixed MLB
+	
+ver 0.32:
+	- ability to add new subreddits

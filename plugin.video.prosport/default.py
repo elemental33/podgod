@@ -53,6 +53,7 @@ display_status = __addon__.getSetting('status')
 display_start_time = __addon__.getSetting('start_time')
 show_sd = __addon__.getSetting('showsd')
 show_hehe = __addon__.getSetting('showhehe')
+display_pattern = __addon__.getSetting('pattern')
 
 logos ={'nba':'http://bethub.org/wp-content/uploads/2015/09/NBA_Logo_.png',
 'nhl':'https://upload.wikimedia.org/wikipedia/de/thumb/1/19/Logo-NHL.svg/2000px-Logo-NHL.svg.png',
@@ -73,7 +74,7 @@ def GetURL(url, referer=None):
     if referer:
     	request.add_header('Referer', referer)
     try:
-    	response = urllib2.urlopen(request, timeout=10)
+    	response = urllib2.urlopen(request, timeout=3)
     	html = response.read()
     	return html
     except:
@@ -85,7 +86,7 @@ def GetJSON(url):
     request = urllib2.Request(url)
     request.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
     try:
-    	response = urllib2.urlopen(request)
+    	response = urllib2.urlopen(request, timeout=3)
     	f = response.read()
     	jsonDict = json.loads(f)
     	return jsonDict
@@ -93,12 +94,18 @@ def GetJSON(url):
     	xbmcgui.Dialog().ok(__addonname__, 'Looks like '+url+' is down... Please try later...')
     	return None
 
+def GameStatus(status):
+	statuses = {'pre-event':'Not started', 'mid-event':'[COLOR green]In progress[/COLOR]', 'post-event':'Completed', 'postponed':'Postponed'}
+	if status in statuses:
+		return statuses[status]
+	else: return ''	
+
 def Main():
 	addDir("[COLOR=FF00FF00][ NBA GAMES ][/COLOR]", '', iconImg='http://bethub.org/wp-content/uploads/2015/09/NBA_Logo_.png', mode="nba")
 	addDir("[COLOR=FF00FF00][ NHL GAMES ][/COLOR]", '', iconImg='https://upload.wikimedia.org/wikipedia/de/thumb/1/19/Logo-NHL.svg/2000px-Logo-NHL.svg.png', mode="nhl")
 	addDir("[COLOR=FF00FF00][ NFL GAMES ][/COLOR]", '', iconImg='http://www.shermanreport.com/wp-content/uploads/2012/06/NFL-Logo1.gif', mode="nfl")
-	#addDir("[COLOR=FF00FF00][ MLB GAMES ][/COLOR]", '', iconImg='http://content.sportslogos.net/logos/4/490/full/1986.gif', mode="mlb")
-	#addDir("[COLOR=FF00FF00][ Soccer GAMES ][/COLOR]", '', iconImg='http://images.clipartpanda.com/soccer-ball-clipart-soccer-ball-clip-art-4.png', mode="soccer")
+	addDir("[COLOR=FF00FF00][ MLB GAMES ][/COLOR]", '', iconImg='http://content.sportslogos.net/logos/4/490/full/1986.gif', mode="mlb")
+	addDir("[COLOR=blue][ MY SUBREDDITS ][/COLOR]", '', iconImg='http://scitechconnect.elsevier.com/wp-content/uploads/2014/07/1reddit-logo2.png', mode="myreddit")
 	addDir("[COLOR=FFFFFF00][ Archive ][/COLOR]", '', iconImg='special://home/addons/plugin.video.prosport/icon.png', mode="archive")
 	xbmcplugin.endOfDirectory(h)
 
@@ -107,14 +114,7 @@ def Arch():
 	addDir("[COLOR=FFFFFF00][ NFL Archive ][/COLOR]", '', iconImg='http://www.shermanreport.com/wp-content/uploads/2012/06/NFL-Logo1.gif', mode="nflarch")
 	addDir("[COLOR=FFFFFF00][ NHL Archive ][/COLOR]", '', iconImg='https://upload.wikimedia.org/wikipedia/de/thumb/1/19/Logo-NHL.svg/2000px-Logo-NHL.svg.png', mode="nhlarch")
 	#addDir("[COLOR=FFFFFF00][ MLB Archive ][/COLOR]", '', iconImg='http://content.sportslogos.net/logos/4/490/full/1986.gif', mode="mlbarch")
-	#addDir("[COLOR=FFFFFF00][ Soccer Archive ][/COLOR]", '', iconImg='http://images.clipartpanda.com/soccer-ball-clipart-soccer-ball-clip-art-4.png', mode="soccerarch")
 	xbmcplugin.endOfDirectory(h)
-
-def GameStatus(status):
-	statuses = {'pre-event':'Not started', 'mid-event':'[COLOR green]In progress[/COLOR]', 'post-event':'Completed', 'postponed':'Postponed'}
-	if status in statuses:
-		return statuses[status]
-	else: return ''	
 	
 def Games(mode):
 	today = datetime.utcnow() - timedelta(hours=8)
@@ -128,12 +128,26 @@ def Games(mode):
 		for game in js:
 			home = game['away_team']['name']
 			away = game['home_team']['name']
-			hs = str(game['score']['home'][game['score']['cols'].index('Total')])
-			if not hs:
-				hs = '0'
-			avs = str(game['score']['away'][game['score']['cols'].index('Total')])
-			if not avs:
-				avs = '0'
+			if 'mlb' in mode:
+				try:
+					hs = str(game['score']['home'][game['score']['cols'].index('R')])
+					if not hs:
+						hs = '0'
+				except:
+					hs = '0'
+				try:
+					avs = str(game['score']['away'][game['score']['cols'].index('R')])
+					if not avs:
+						avs = '0'
+				except:
+					avs = '0'
+			else:
+				hs = str(game['score']['home'][game['score']['cols'].index('Total')])
+				if not hs:
+					hs = '0'
+				avs = str(game['score']['away'][game['score']['cols'].index('Total')])
+				if not avs:
+					avs = '0'
 			score = ' - '+avs+':'+hs
 			start_time = game['start_time']
 			try:
@@ -164,12 +178,92 @@ def Games(mode):
 				title = title+'[COLOR=FFFF0000]'+status+'[/COLOR]'
 			if display_score=='true':
 				title = title+'[COLOR=FF00FFFF]'+score+'[/COLOR]'
-			addDir(title, mode, iconImg=logos[mode], home=home, away=away, mode="STREAMS")
+			addDir(title, mode, iconImg=logos[mode], home=home, away=away, mode="PROSTREAMS")
 	else:
 		addDir("[COLOR=FFFF0000]Could not fetch today's "+mode.upper()+" games... Probably no games today?[/COLOR]", '', iconImg="", mode="")
 	xbmcplugin.endOfDirectory(h, cacheToDisc=True)
 
-def getStreams(ur, home, away):
+def MyReddits():
+	sys_url = sys.argv[0] + '?mode=addnew'
+	item = xbmcgui.ListItem('[COLOR=FFFF0000][ Add new subreddit ][/COLOR]', iconImage='', thumbnailImage='')
+	xbmcplugin.addDirectoryItem(handle=h, url=sys_url, listitem=item, isFolder=False)
+	reddits = __addon__.getSetting('reddits').split(',')
+	if len(reddits)>0:
+		for reddit in reddits:
+			popup = []
+			uri = sys.argv[0] + "?url="+reddit+"&mode=edit"
+			popup.append(('Edit subreddit', 'RunPlugin(%s)'%uri,))
+			uri2 = sys.argv[0] + "?url="+reddit+"&mode=remove"
+			popup.append(('Remove subreddit', 'RunPlugin(%s)'%uri2,))
+			if ':' in reddit:
+				title = reddit.split(":")[0]
+				pattern = ''
+				if display_pattern == 'true':
+					pattern = " - "+reddit.split(":")[-1]
+				if len(title)>0:
+					addDir2("[COLOR=FF00FF00][ "+title.upper()+" ]"+pattern+"[/COLOR]", reddit, '', iconImg='', popup=popup, mode="topics")
+			else:
+				if len(reddit)>0:
+					addDir2("[COLOR=FF00FF00][ "+reddit.upper()+" ][/COLOR]", reddit, '', iconImg='', popup=popup, mode="topics")
+	xbmcplugin.endOfDirectory(h)
+
+def Topics(url):
+	r = praw.Reddit(user_agent='xbmc pro sport addon')
+	r.config.api_request_delay = 0
+	for submission in r.get_subreddit(url.split(':')[0]).get_hot(limit=30):
+		if ":" in url:
+			pattern = url.split(":")[-1]
+			if pattern.lower() in submission.title.lower():
+				addDir("[COLOR=FFFFFF00][ "+submission.title+" ][/COLOR]", submission.id, iconImg='', home=submission.title, away='', mode="MYSTREAMS")
+		else:
+			addDir("[COLOR=FFFFFF00][ "+submission.title+" ][/COLOR]", submission.id, iconImg='', home=submission.title, away='', mode="MYSTREAMS")
+	xbmcplugin.endOfDirectory(h)
+
+def Addnew():
+	kbd = xbmc.Keyboard()
+	kbd.setDefault('')
+	kbd.setHeading("Add new subreddit")
+	kbd.doModal()
+	s = None
+	if kbd.isConfirmed():
+	    s = kbd.getText()
+	words = []
+	history = __addon__.getSetting('reddits')
+	if history:
+	    words = history.split(",")
+	if s and s not in words:
+	    words.append(s)
+	    __addon__.setSetting('reddits', ','.join(words))
+	xbmc.executebuiltin("Container.Refresh")
+
+def Edit(url):
+	kbd = xbmc.Keyboard()
+	kbd.setDefault(url)
+	kbd.setHeading("Edit subreddit")
+	kbd.doModal()
+	s = None
+	if kbd.isConfirmed():
+	    s = kbd.getText()
+	words = []
+	history = __addon__.getSetting('reddits')
+	if history:
+	    words = history.split(",")
+	for el in words:
+		if el==url and s:
+			words[words.index(el)] = s
+	__addon__.setSetting('reddits', ','.join(words))
+	xbmc.executebuiltin("Container.Refresh")
+
+def Remove(url):
+	title = xbmc.getInfoLabel('ListItem.Title')
+	title = title.replace('[COLOR=FFFFFF00][','').replace('][/COLOR]','').strip()
+	reddits = __addon__.getSetting('reddits').split(',')
+	reddits = [x.lower() for x in reddits]
+	reddits.remove(url.lower())
+	__addon__.setSetting('reddits', ','.join(reddits))
+	xbmc.executebuiltin("Container.Refresh")
+
+def getProStreams(ur, home, away):
 	orig_title = '[COLOR=FF00FF00][B]'+away+' at '+home+'[/B][/COLOR]'
 	if 'redzone' in orig_title:
 		orig_title = '[COLOR=FF00FF00][B]NFL Redzone[/B][/COLOR]'
@@ -180,8 +274,9 @@ def getStreams(ur, home, away):
 	r = praw.Reddit(user_agent='xbmc pro sport addon')
 	r.config.api_request_delay = 0
 	links=[]
+	is_101_hd = False
 	for submission in r.get_subreddit(ur+'streams').get_hot(limit=30):
-		if not home_l in submission.title.lower() and not away_l in submission.title.lower():
+		if not (home_l in submission.title.lower() and away_l in submission.title.lower()):
 			continue
 		flat_comments = praw.helpers.flatten_tree(submission.comments)
 		for comment in flat_comments:
@@ -189,9 +284,33 @@ def getStreams(ur, home, away):
 				flat_comments.remove(comment)
 		flat_comments.sort(key=lambda comment: comment.score , reverse=True)
 		for comment in flat_comments:
+			if ('HD' in comment.body or 'hd' in comment.body) and '101live' in comment.body:
+				is_101_hd = True
 			regex = re.compile(r'([-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?)',re.IGNORECASE)
 			link = re.findall(regex, comment.body)
 			links = links + link
+	ParseLinks(links, ur, is_101_hd, home_f, away_f, orig_title)
+
+def getMyStreams(url, home):
+	r = praw.Reddit(user_agent='xbmc pro sport addon')
+	r.config.api_request_delay = 0
+	submission = r.get_submission(submission_id=url)
+	links=[]
+	is_101_hd = False
+	flat_comments = praw.helpers.flatten_tree(submission.comments)
+	for comment in flat_comments:
+		if not isinstance(comment,praw.objects.Comment):
+			flat_comments.remove(comment)
+	flat_comments.sort(key=lambda comment: comment.score , reverse=True)
+	for comment in flat_comments:
+		if ('HD' in comment.body or 'hd' in comment.body) and '101live' in comment.body:
+			is_101_hd = True
+		regex = re.compile(r'([-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?)',re.IGNORECASE)
+		link = re.findall(regex, comment.body)
+		links = links + link
+	ParseLinks(links, url, is_101_hd, '', '', home)
+	
+def ParseLinks(links, ur, is_101_hd, home_f, away_f, orig_title):	
 	if links:
 		if 'nba' in ur and show_hehe=='true':
 			twrb = threadWithReturn(target=Hehestreams, args=(home_f, away_f, orig_title,))
@@ -200,7 +319,7 @@ def getStreams(ur, home, away):
 		for el in links:
 			el = el[0]
 			if 'http://' not in el and 'https://' not in el:
-				el = 'http://'+el
+				el = 'http://www.'+el
 			if 'blabseal.com' in el:
 				url = Blabseal(el)
 				if url and url not in urls:
@@ -261,6 +380,11 @@ def getStreams(ur, home, away):
 				if url and url not in urls:
 					addLink('Fox ToGo (US IP Only)', orig_title, url, mode="PLAY")
 					urls.append(url)
+			elif 'mlblive-akc' in el:
+				url = Getmlb(el)
+				if url and url not in urls:
+					addLink('MLB app', orig_title, url, mode="PLAY")
+					urls.append(url)
 			elif 'streamsarena.eu' in el:
 				url = Streamarena(el)
 				if url and url not in urls:
@@ -309,9 +433,14 @@ def getStreams(ur, home, away):
 			elif 'room' in el and 'm3u8' in el:
 				url = Getroom(el)
 				if url and url not in urls:
-					addLink('Room HD', orig_title, url, mode="PLAY")
+					addLink('Room HD (US IP Only)', orig_title, url, mode="PLAY")
 					urls.append(url)
-			elif '.m3u8' in el and 'room' not in el and 'anvato' not in el and 'turner.com' not in el:
+			elif '101livesportsvideos.com' in el and 'SD' not in el and 'ace' not in el and is_101_hd:
+				url = Livesports101(el)
+				if url and url not in urls:
+					addLink('101livesportsvideos.com', orig_title, url, mode="PLAY")
+					urls.append(url)
+			elif '.m3u8' in el and 'room' not in el and 'anvato' not in el and 'mlblive-akc' not in el:
 				url = el
 				if url and url not in urls:
 					addLink('M3U8 stream', orig_title, url, mode="PLAY")
@@ -338,7 +467,7 @@ def getStreams(ur, home, away):
 						addDirectLink('Neulion link expires '+time_exp, {'Title': orig_title}, lnk)
 				
 	else:
-		addDir("[COLOR=FFFF0000]Could not find game on reddit[/COLOR]", '', iconImg="", mode="")
+		addDir("[COLOR=FFFF0000]Could not find any streams...[/COLOR]", '', iconImg="", mode="")
 	xbmcplugin.endOfDirectory(h, cacheToDisc=True)
 
 def strip_non_ascii(string):
@@ -435,6 +564,17 @@ def GetYoutube(url):
 	except:
 		return None
 		
+def Getmlb(url):
+	try:
+		if 'master' in url:
+			return url
+		else:	 
+			lst = url.split('/')
+			link = url.replace(lst[len(lst)-2],'3000K').replace(lst[len(lst)-1],'3000_slide.m3u8')
+			return link
+	except:
+		return None
+
 def Getanvato(url):
 	try:
 		if 'master' in url:
@@ -523,7 +663,7 @@ def Streambot(url):
 		cookieJar = cookielib.CookieJar()
 		opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookieJar), urllib2.HTTPHandler())
 		conn = urllib2.Request('https://streamboat.tv/signin')
-		connection = opener.open(conn)
+		connection = opener.open(conn, timeout=3)
 		for cookie in cookieJar:
 			token = cookie.value
 		headers = {
@@ -538,9 +678,9 @@ def Streambot(url):
 		}
 		reqData = {'csrfmiddlewaretoken':token,'username' : 'test_user', 'password' : 'password'}
 		conn = urllib2.Request('https://streamboat.tv/signin', urllib.urlencode(reqData), headers)
-		connection = opener.open(conn)
+		connection = opener.open(conn, timeout=3)
 		conn = urllib2.Request(url)
-		connection = opener.open(conn)
+		connection = opener.open(conn, timeout=3)
 		html = connection.read()
 		connection.close()
 		block_content = common.parseDOM(html, "source", attrs={"type": "application/x-mpegURL"}, ret="src")[0]
@@ -605,7 +745,7 @@ def Moonfruit(url):
 		cookieJar = cookielib.CookieJar()
 		opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookieJar), urllib2.HTTPHandler())
 		conn = urllib2.Request(url+'/htown3')
-		connection = opener.open(conn)
+		connection = opener.open(conn, timeout=3)
 		for cookie in cookieJar:
 			token = cookie.value
 		headers = {
@@ -619,7 +759,7 @@ def Moonfruit(url):
 		link = common.parseDOM(html, "iframe",  ret="src")
 		link = url+link[-1]
 		conn = urllib2.Request(link, headers=headers)
-		connection = opener.open(conn)
+		connection = opener.open(conn, timeout=3)
 		html = connection.read()
 		link = common.parseDOM(html, "iframe",  ret="src")[0]
 		if 'streamup.com' in link:
@@ -648,7 +788,7 @@ def Nflwatch(url):
 			request = urllib2.Request(url)
 			request.add_header('User-Agent', agent)
 			request.add_header('Referer', url)
-			response = urllib2.urlopen(request)
+			response = urllib2.urlopen(request, timeout=3)
 			html = response.read()
 			token = html.split('murl = "')[1].split('";')[0]
 			link = base64.b64decode(token)
@@ -656,7 +796,7 @@ def Nflwatch(url):
 			request.add_header('User-Agent', agent)
 			request.add_header('Referer', url)
 			request.add_header('X-Requested-With', 'XMLHttpRequest')
-			response = urllib2.urlopen(request)
+			response = urllib2.urlopen(request, timeout=3)
 			html = response.read()
 			js = json.loads(html)
 			tkn = js['token']
@@ -681,7 +821,7 @@ def Zona4vip(url):
 			request = urllib2.Request(url)
 			request.add_header('User-Agent', agent)
 			request.add_header('Referer', url)
-			response = urllib2.urlopen(request)
+			response = urllib2.urlopen(request, timeout=3)
 			html = response.read()
 			token = html.split('murl = "')[1].split('";')[0]
 			link = base64.b64decode(token)
@@ -689,7 +829,7 @@ def Zona4vip(url):
 			request.add_header('User-Agent', agent)
 			request.add_header('Referer', url)
 			request.add_header('X-Requested-With', 'XMLHttpRequest')
-			response = urllib2.urlopen(request)
+			response = urllib2.urlopen(request, timeout=3)
 			html = response.read()
 			js = json.loads(html)
 			tkn = js['token']
@@ -704,7 +844,7 @@ def Ducking(url):
 		request = urllib2.Request('http://www.ducking.xyz/kvaak/stream/basu.php')
 		request.add_header('Referer', 'www.ducking.xyz/kvaak/')
 		request.add_header('User-Agent','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36')
-		response = urllib2.urlopen(request)
+		response = urllib2.urlopen(request, timeout=3)
 		html = response.read()
 		link = common.parseDOM(html, "iframe", ret="src")[0]
 		channel = link.split('/')[3]
@@ -728,8 +868,6 @@ def Streamarena(url):
 		
 def Livesports101(url):
 	try:
-		url = url.split('</strong>')[0]
-		url = 'http://www.101'+url.split('101')[1]
 		html = GetURL(url)
 		try:
 			block_content = common.parseDOM(html, "meta", attrs={"property": "og:description"}, ret="content")
@@ -814,7 +952,7 @@ def sawresolve(url):
 		request = urllib2.Request(url)
 		request.add_header('Referer', referer)
 		request.add_header('User-Agent','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36')
-		response = urllib2.urlopen(request)
+		response = urllib2.urlopen(request, timeout=3)
 		result = response.read()
 		unpacked = ''
 		packed = result.split('\n')
@@ -839,14 +977,14 @@ def sawresolve(url):
 		request = urllib2.Request(url)
 		request.add_header('Referer', referer)
 		request.add_header('User-Agent','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36')
-		response = urllib2.urlopen(request)
+		response = urllib2.urlopen(request, timeout=3)
 		result = response.read()
 		file = re.compile("'file'.+?'(.+?)'").findall(result)[0]
 		try:
 			if not file.startswith('http'): 
 				raise Exception()
 			request = urllib2.Request(file)
-			response = urllib2.urlopen(request)
+			response = urllib2.urlopen(request, timeout=3)
 			url = response.geturl()
 			if not '.m3u8' in url: 
 				raise Exception()
@@ -890,6 +1028,13 @@ def addDir(title, url, iconImg="DefaultVideo.png", home="", away="", mode=""):
     item.setInfo(type='Video', infoLabels={'Title': title})
     xbmcplugin.addDirectoryItem(handle=h, url=sys_url, listitem=item, isFolder=True)
 
+def addDir2(title, url, next_url, iconImg="DefaultVideo.png", popup=None, mode=""):
+    sys_url = sys.argv[0] + '?url=' + urllib.quote_plus(url)+'&next_url=' + urllib.quote_plus(next_url) +'&mode=' + urllib.quote_plus(str(mode))
+    item = xbmcgui.ListItem(title, iconImage=iconImg, thumbnailImage=iconImg)
+    item.setInfo(type='Video', infoLabels={'Title': title})
+    if popup:
+    	item.addContextMenuItems(popup, True)
+    xbmcplugin.addDirectoryItem(handle=h, url=sys_url, listitem=item, isFolder=True)
 
 def addLink(title, orig_title, url, iconImg="DefaultVideo.png", mode=""):
     sys_url = sys.argv[0] + '?url=' + urllib.quote_plus(url) + '&mode=' + urllib.quote_plus(str(mode))+ '&orig=' + urllib.quote_plus(str(orig_title))
@@ -952,13 +1097,19 @@ elif mode == 'nba': Games(mode)
 elif mode == 'nhl': Games(mode)
 elif mode == 'mlb': Games(mode)
 elif mode == 'soccer': Games(mode)
+elif mode == 'myreddit': MyReddits()
 elif mode == 'nbaarch': Archive(page, mode)
 elif mode == 'nflarch': Archive(page, mode)
 elif mode == 'nhlarch': Nhlarchive(page, mode)
 elif mode == 'archive': Arch()
 elif mode == 'playarchive': PlayArchive(url)
 elif mode == 'playnhlarchive': Playnhlarchive(url)
-elif mode == 'STREAMS': getStreams(url, home, away)
+elif mode == 'PROSTREAMS': getProStreams(url, home, away)
+elif mode == 'MYSTREAMS': getMyStreams(url, home)
 elif mode == 'PLAY': Play(url, orig_title)
+elif mode == 'topics': Topics(url)
+elif mode == 'addnew': Addnew()
+elif mode == 'remove': Remove(url)
+elif mode == 'edit': Edit(url)
 
 xbmcplugin.endOfDirectory(h)
