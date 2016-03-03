@@ -5,7 +5,7 @@ fanart="http://i.imgur.com/TDiTtbA.jpg"
 description="Install latest build. This can be up to 1 GB download, so it may take a while"
 
 name="[B]Latest Update[/B] (v.4.5-Feb 06)"	
-url="https://github.com/podgod/podgod/blob/master/TEST_Files/resources/service.pgtv.zip?raw=true"
+url="https://archive.org/download/podgod/backup.zip"
 img="https://raw.githubusercontent.com/podgod/podgod/master/TEST_Files/resources/latest.png"
 fanart="http://i.imgur.com/TDiTtbA.jpg"
 description="Install latest update. This can be up to 1 GB download, so it may take a while"
