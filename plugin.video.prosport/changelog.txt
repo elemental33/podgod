@@ -106,3 +106,7 @@ ver 0.31:
 	
 ver 0.32:
 	- ability to add new subreddits
+	
+ver 0.33:
+	- added more SD streams
+	- added caststreams for nhl (can be disabled in addon settings)

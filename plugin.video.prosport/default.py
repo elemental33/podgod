@@ -43,6 +43,7 @@ import calendar, time
 import CommonFunctions
 import praw
 from threadWithReturn import threadWithReturn
+from urlparse import urlparse
 common = CommonFunctions
 
 __addon__ = xbmcaddon.Addon('plugin.video.prosport')
@@ -53,6 +54,7 @@ display_status = __addon__.getSetting('status')
 display_start_time = __addon__.getSetting('start_time')
 show_sd = __addon__.getSetting('showsd')
 show_hehe = __addon__.getSetting('showhehe')
+show_cast = __addon__.getSetting('showcast')
 display_pattern = __addon__.getSetting('pattern')
 
 logos ={'nba':'http://bethub.org/wp-content/uploads/2015/09/NBA_Logo_.png',
@@ -214,9 +216,9 @@ def Topics(url):
 		if ":" in url:
 			pattern = url.split(":")[-1]
 			if pattern.lower() in submission.title.lower():
-				addDir("[COLOR=FFFFFF00][ "+submission.title+" ][/COLOR]", submission.id, iconImg='', home=submission.title, away='', mode="MYSTREAMS")
+				addDir("[COLOR=FFFFFF00][ "+submission.title.encode('utf-8')+" ][/COLOR]", submission.id, iconImg='', home=submission.title.encode('utf-8'), away='', mode="MYSTREAMS")
 		else:
-			addDir("[COLOR=FFFFFF00][ "+submission.title+" ][/COLOR]", submission.id, iconImg='', home=submission.title, away='', mode="MYSTREAMS")
+			addDir("[COLOR=FFFFFF00][ "+submission.title.encode('utf-8')+" ][/COLOR]", submission.id, iconImg='', home=submission.title.encode('utf-8'), away='', mode="MYSTREAMS")
 	xbmcplugin.endOfDirectory(h)
 
 def Addnew():
@@ -315,6 +317,9 @@ def ParseLinks(links, ur, is_101_hd, home_f, away_f, orig_title):
 		if 'nba' in ur and show_hehe=='true':
 			twrb = threadWithReturn(target=Hehestreams, args=(home_f, away_f, orig_title,))
 			twrb.start()
+		if 'nhl' in ur and show_cast=='true':
+			twrh = threadWithReturn(target=Caststreams, args=(home_f, away_f, orig_title,))
+			twrh.start()
 		urls = []
 		for el in links:
 			el = el[0]
@@ -364,11 +369,6 @@ def ParseLinks(links, ur, is_101_hd, home_f, away_f, orig_title):
 				url = Nbanhlstreams(el)
 				if url and url not in urls:
 					addLink('Livenflstream.net', orig_title, url, mode="PLAY")
-					urls.append(url)
-			elif 'giostreams.eu' in el and show_sd=='true':
-				url = Giostreams(el)
-				if url and url not in urls:
-					addLink('Giostreams (SD)', orig_title, url, mode="PLAY")
 					urls.append(url)
 			elif 'streamendous.com' in el and show_sd=='true':
 				url = Streamendous(el)
@@ -430,6 +430,11 @@ def ParseLinks(links, ur, is_101_hd, home_f, away_f, orig_title):
 				if url and url not in urls:
 					addLink('Moonfruit', orig_title, url, mode="PLAY")
 					urls.append(url)
+			elif show_sd=='true' and ('bosscast.net' in el or 'watchsportstv.boards.net' in el or 'tv-link.in' in el or 'giostreams.eu' in el):
+				url = Universal(el)
+				if url and url not in urls:
+					addLink('SD Stream', orig_title, url, mode="PLAY")
+					urls.append(url)
 			elif 'room' in el and 'm3u8' in el:
 				url = Getroom(el)
 				if url and url not in urls:
@@ -465,6 +470,10 @@ def ParseLinks(links, ur, is_101_hd, home_f, away_f, orig_title):
 						except:
 							time_exp = ''
 						addDirectLink('Neulion link expires '+time_exp, {'Title': orig_title}, lnk)
+		
+		if 'nhl' in ur and show_cast=='true':
+			link = twrh.join()
+			addDirectLink('CastStreams', {'Title': orig_title}, link)
 				
 	else:
 		addDir("[COLOR=FFFF0000]Could not find any streams...[/COLOR]", '', iconImg="", mode="")
@@ -620,7 +629,32 @@ def Hehestreams(home, away, orig_title):
 				return lnks
 	except:
 		return None	
-	
+
+
+def Caststreams(home, away, orig_title):
+	try:
+		url = 'https://caststreams.com:2053/login'
+		data = urllib.urlencode({"email":"prosport@testmail.com","password":"prosport","ipaddress":"desktop","androidId":"","deviceId":"","isGoogleLogin":0})
+		request = urllib2.Request(url, data)
+		response = urllib2.urlopen(request, timeout=3)
+		resp = response.read()
+		jsonDict = json.loads(resp)
+		token = jsonDict['token']
+		url = 'https://caststreams.com:2053/feeds'
+		request = urllib2.Request(url)
+		request.add_header('Authorization', token)
+		response = urllib2.urlopen(request, timeout=3)
+		resp = response.read()
+		jsonDict = json.loads(resp)
+		feeds = jsonDict['feeds']
+		for feed in feeds:
+			title = feed['nam']
+			if home.lower() in title.lower() and away.lower() in title.lower():
+				channel = feed['url'][0]
+				link = 'https://caststreams.com:2053/getGame?rUrl='+channel
+				return link	
+	except:
+		return None		
 		
 def Oneapp(url):
 	try:
@@ -925,12 +959,20 @@ def Streamendous(url):
 	except:
 		return None
 
-  
-def Giostreams(url):
+
+def Universal(url):
 	try:
-		req = GetURL(url)
-		result = common.parseDOM(req, 'iframe', ret='src')[0]  
-		this = GetURL(result, referer=result)
+		for i in range (5):
+			domain = urlparse(url).netloc
+			req = GetURL(url)
+			url = common.parseDOM(req, 'iframe', ret='src')[0]
+			if 'http://' not in url:
+				 url = 'http://'+domain+url
+			if 'wiz1' in url or 'live9.net' in url:
+				break
+			else:
+				continue 
+		this = GetURL(url, referer=url)
 		link = re.compile('src="(.+?)"').findall(str(this))[0]
 		if ('sawlive') in link:
 			link = sawresolve(link)

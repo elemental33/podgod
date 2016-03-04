@@ -5,5 +5,6 @@
 		<setting id="score" type="bool" label="Display game's scores?" default="true" />
 		<setting id="showsd" type="bool" label="Show SD streams?" default="true" />
 		<setting id="showhehe" type="bool" label="Check hehestreams for nba links?" default="true" />
+		<setting id="showcast" type="bool" label="Check caststreams for nhl links?" default="true" />
 		<setting id="pattern" type="bool" label="Display pattern for subreddits?" default="true" />
 </settings>
