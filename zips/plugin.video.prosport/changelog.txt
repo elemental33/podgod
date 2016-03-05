@@ -110,3 +110,9 @@ ver 0.32:
 ver 0.33:
 	- added more SD streams
 	- added caststreams for nhl (can be disabled in addon settings)
+	
+ver 0.34:
+	- more SD streams
+	
+ver 0.35:
+	- bugfixes

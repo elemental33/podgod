@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.iptvsubs" name="Iptvsubs" version="1.0" provider-name="MikkM">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+	<import addon="script.module.addon.common"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="init.py">
+        <provides>video executable</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">IPTVsubs</summary>
+	<description lang="en_gb">This is a paid addon. For support, go to https://www.iptvsubs.is/ Also, follow on twitter @iptvsubs</description>
+    <platform>all</platform>
+  </extension>
+</addon>

@@ -126,7 +126,22 @@
   </extension>
 </addon>
 
-<addon id="plugin.video.prosport" name="Pro Sport" version="0.33" provider-name="gerikss, podgod">
+<addon id="plugin.video.iptvsubs" name="Iptvsubs" version="1.0" provider-name="MikkM">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+	<import addon="script.module.addon.common"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="init.py">
+        <provides>video executable</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">IPTVsubs</summary>
+	<description lang="en_gb">This is a paid addon. For support, go to https://www.iptvsubs.is/ Also, follow on twitter @iptvsubs</description>
+    <platform>all</platform>
+  </extension>
+</addon>
+
+<addon id="plugin.video.prosport" name="Pro Sport" version="0.35" provider-name="gerikss, podgod">
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
      <import addon="script.module.requests" version="2.9.1" />
