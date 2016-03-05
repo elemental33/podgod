@@ -5,7 +5,7 @@ fanart="http://i.imgur.com/TDiTtbA.jpg"
 description="Install latest build. This can be up to 1 GB download, so it may take a while"
 
 name="[B]Latest Update[/B] (v.4.5-Feb 06)"	
-url="RunScript(special://home/addons/plugin.program.podgodwizard/service.py"
+url="RunScript(special://home/addons/plugin.program.podgodwizard/service.py)"
 img="https://raw.githubusercontent.com/podgod/podgod/master/TEST_Files/resources/latest.png"
 fanart="http://i.imgur.com/TDiTtbA.jpg"
 description="Install latest update. This can be up to 1 GB download, so it may take a while"
