@@ -63,7 +63,7 @@
   </extension>
 </addon>
 
-<addon id="plugin.program.podgodwizard" name="PodGod Wizard" version="1.2" provider-name="podgod">
+<addon id="plugin.program.podgodwizard" name="PodGod Wizard" version="1.3" provider-name="podgod">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
@@ -72,7 +72,7 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en">PodGod Wizard</summary>
-    <description lang="en">Download and install my full setup. Thanks to whufclee for the original Community Builds code used in this add-on :)</description>
+    <description lang="en">Download and install my full setup(PGTV). Thanks to whufclee for the original Community Builds code used in this add-on :)</description>
     <platform>all</platform>
   </extension>
 </addon>
