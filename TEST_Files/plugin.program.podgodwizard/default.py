@@ -27,16 +27,15 @@ THUMBNAILS =  xbmc.translatePath(os.path.join(USERDATA,'Thumbnails'))
 zip =  ADDON.getSetting('zip')
 USB =  xbmc.translatePath(os.path.join(zip))
 skin =  xbmc.getSkinDir()
-VERSION = "2.1"
+VERSION = "1.3"
 PATH = "podgodwizard"
 
 def MainMenu():
 	Maintenance  =  ADDON.getSetting('Maintenance')
-	podgodBuildMenu  =  ADDON.getSetting('podgodBuildMenu')
+	TestArea  =  ADDON.getSetting('TestArea')
 	Extras  =  ADDON.getSetting('Extras')
 	CommunityBuildMenu  =  ADDON.getSetting('CommunityBuildMenu')	
-	if podgodBuildMenu == 'true':
-		addFolder('folder','PodGod Build','none', 'podgodBuildMenu', 'podgodbuild.png','','','')
+	addFolder('folder','Install Latest PGTV Setup','none', 'podgodupdate', 'latest.png','','','')
 	#if CommunityBuildMenu == 'true':
 		#addFolder('folder','Community Builds','none', 'CommBuildMenu', 'community.png','','','')
 	if Extras == 'true':
@@ -44,7 +43,12 @@ def MainMenu():
 	if Maintenance == 'true':
 		addFolder('folder','Maintenance and Tweaks','FanArt', 'Tools', 'maintenance.png','','','')	
 	setView('list', 'MAIN')
-def podgodBuildMenu():
+	if TestArea == 'true':
+		addFolder('folder','Test Area','none', 'TestArea', 'test.png','','','')
+def podgodupdate():
+	xbmc.executebuiltin("RunScript(special://home/addons/plugin.program.podgodwizard/update.py)")
+	sys.exit()
+def TestArea():
     link = OPEN_URL('https://raw.githubusercontent.com/podgod/podgod/master/TEST_Files/resources/wizard.txt').replace('\n','').replace('\r','')  #HERE YOU NEED TO ADDRESS FOR THE XML FILE ON YOU WEBSPACE THIS WILL BE WHERE YOU HAVE THE PATH TO YOUR ZIP FILES
     match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
     for name,url,iconimage,FanArt,description in match:
@@ -176,7 +180,7 @@ def OPEN_URL(url):
 def wizard(name,url,description):
     path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
     dp = xbmcgui.DialogProgress()
-    dp.create("[COLOR dodgerblue]Community[/COLOR] [COLOR lime]Toolbox[/COLOR]","Downloading ",'', 'Please Wait')
+    dp.create("[COLOR dodgerblue]PodGod[/COLOR] [COLOR lime]Wizard[/COLOR]","Downloading ",'', 'Please Wait')
     lib=os.path.join(path, name+'.zip')
     try:
        os.remove(lib)
@@ -378,7 +382,8 @@ def setView(content, viewType):
 
 if mode==None or url==None or len(url)<1:
         MainMenu()
-elif mode == 'podgodBuildMenu' : podgodBuildMenu() #KodiBuildMenu
+elif mode == 'podgodupdate' : podgodupdate() #Kodiupdate
+elif mode == 'TestArea' : TestArea() #KodiBuildMenu
 elif mode == 'CommBuildMenu' : CommBuildMenu() #CommBuildMenu
 elif mode == 'Tools' : Tools() #ToolsMenu
 elif mode == 'ExtraMenu': ExtraMenu() #ExtraMenu

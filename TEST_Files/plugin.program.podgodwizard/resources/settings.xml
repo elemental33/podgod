@@ -10,9 +10,7 @@
 	</category>
     
 	<category label="Show/Hide Content">	
-	    <setting id="podgodBuildMenu" type="bool" label="podgod TV Builds" default="true"/>	
-		<setting id="CommunityBuildMenu" type="bool" label="Community Builds" default="true"/>		
-		<setting id="Extras" type="bool" label="Extra" default="false"/>	
+	    <setting id="TestArea" type="bool" label="Test Area" default="true"/>	
 		<setting id="Maintenance" type="bool" label="Maintenance" default="true"/>
 	</category>
 </settings>
