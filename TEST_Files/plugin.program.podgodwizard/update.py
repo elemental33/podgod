@@ -16,6 +16,14 @@ localtxt05 = 'Updating'
 localtxt06 = 'Succeeded'
 localtxt07 = 'Unpacking PGTV.zip. Please Wait.'
 
+addonname   = 'Warning! [B][COLOR yellow]This Will Overwrite Your Current Setup![/COLOR][/B]'
+line1 = 'After clicking OK, the latest version of [B][COLOR yellow]PGTV[/COLOR][/B] will download.'
+line2 = 'This is over 1 GB and can take up to an hour to install.'
+line3 = 'Only do this if you want to update to the latest version of PGTV. If you do not, please click cancel.'
+ 
+xbmcgui.Dialog().ok(addonname, line1, line2, line3)
+
+
 def DownloaderClass(url,dest):
         dp = xbmcgui.DialogProgress()
         dp.create(localtxt00,localtxt02,'')
