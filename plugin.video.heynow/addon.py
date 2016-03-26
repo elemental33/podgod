@@ -26,14 +26,19 @@ from xbmcswift2 import Plugin
 
 RSS_FEEDS = (
     {
-        'title': 'Archived Shows',
+        'title': '[COLOR blue]Archived Shows[/COLOR]',
         'logo': 'stern.png',
-        'stream_url': ('rss://davidstoll.net/Howard%20Stern/hs.xml'),
+        'stream_url': ('rss://cast.xtothezracing.com/?feed=podcast&podcast_series=hss'),
     },
 	{
-        'title': '[COLOR blue]Listen Live![/COLOR]',
+        'title': 'Alternate Archive',
         'logo': 'stern.png',
-        'stream_url': ('http://davidstoll.net/HS.pls'),
+        'stream_url': ('rss://ewilliams.me/feed.xml'),
+    },
+	{
+        'title': '[COLOR blue]Listen Live![/COLOR] [COLOR red](DOWN)[/COLOR]',
+        'logo': 'stern.png',
+        'stream_url': (''),
     }
 )
 

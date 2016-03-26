@@ -1,3 +1,7 @@
+v1.8.3 (Mar 2016) :
+  - Changed source, added alternate source and removed live feed as it was dead
+  - Todo - torrent support
+
 v1.8.2 (Oct 2015) :
   - Changed sources, added live option
 

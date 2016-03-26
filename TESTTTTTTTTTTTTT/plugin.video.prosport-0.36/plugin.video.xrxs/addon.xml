@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.xrxs" name="xrxs" version="0.0.1" provider-name="podgod">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0" />
+     <import addon="script.module.requests" version="2.9.1" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" provides="video" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>xrxs</summary>
+    <description>Live Games from XRXS</description>
+    <platform>all</platform>
+    <language>en</language>
+  </extension>
+</addon>
