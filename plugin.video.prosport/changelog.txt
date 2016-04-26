@@ -136,3 +136,25 @@ ver 0.39:
 	
 ver 0.40:
 	- fix nba
+	
+ver 0.41:
+	- fix windows issue
+	
+ver 0.42:
+	- bugfixes
+	
+ver 0.43:
+	- bugfixes
+	
+ver 0.44:
+	- fixed xrxs
+	
+ver 0.45:
+	- fixed xrxs
+	
+ver 0.46:
+	- fixed xrxs archive
+	- fixed sd streams
+	
+ver 0.47:
+	- fixed some streams
