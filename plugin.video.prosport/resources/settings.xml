@@ -10,6 +10,7 @@
 		<setting id="showxrxs" type="bool" label="Check xrxs.net for nhl links?" default="true" />
         <setting id="pattern" type="bool" label="Display pattern for subreddits?" default="true" />
         <setting id="debug" type="bool" label="Enable debug log" default="false" />
+        <setting id="praw_update_disabled" type="bool" label="PRAW update check disabled" default="false" />
 		</category>
 		<category label="Reddit Login">
 		<setting id="username" type="text" label="Username" default="" />

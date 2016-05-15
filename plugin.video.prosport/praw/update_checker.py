@@ -129,6 +129,10 @@ class UpdateChecker(object):
                                     headers=headers)
             data = response.json()
         except (requests.exceptions.RequestException, ValueError):
+            xbmc.log("update_check RequestException: %s / %s" % (self.url, response))
+            return None
+        except:
+            xbmc.log("Unexpected error: %s" % sys.exc_info()[0])
             return None
 
         if not data or not data.get('success') \

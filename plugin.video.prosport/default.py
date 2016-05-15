@@ -59,6 +59,7 @@ show_xrxs  = __addon__.getSetting('showxrxs')
 display_pattern = __addon__.getSetting('pattern')
 username  = __addon__.getSetting('username')
 password = __addon__.getSetting('password')
+praw_update_disabled = __addon__.getSetting('praw_update_disabled')
 
 logos ={'nba':'http://bethub.org/wp-content/uploads/2015/09/NBA_Logo_.png',
 'nhl':'https://upload.wikimedia.org/wikipedia/de/thumb/1/19/Logo-NHL.svg/2000px-Logo-NHL.svg.png',
@@ -220,7 +221,7 @@ def MyReddits():
 	xbmcplugin.endOfDirectory(h)
 
 def Topics(url):
-	r = praw.Reddit(user_agent='xbmc pro sport addon')
+	r = praw.Reddit(user_agent='xbmc pro sport addon', disable_update_check=praw_update_disabled)
 	if username and password:
 		try:
 			r.login(username, password)
@@ -295,7 +296,7 @@ def getProStreams(ur, home, away):
 		addDir('[ Xrxs ]', '', iconImg='', home=home_l, away=away_l, mode="xrxsstreams")
 	if 'nhl' in ur and show_cast=='true':
 		addLink('Caststreams', orig_title, 'caststreams', mode="play")
-	r = praw.Reddit(user_agent='xbmc pro sport addon')
+	r = praw.Reddit(user_agent='xbmc pro sport addon', disable_update_check=praw_update_disabled)
 	r.config.api_request_delay = 0
 	links=[]
 	for submission in r.get_subreddit(ur+'streams').get_hot(limit=30):
@@ -324,7 +325,7 @@ def getProStreams(ur, home, away):
 		xbmcplugin.endOfDirectory(h, cacheToDisc=True)
 
 def getMyStreams(url, home):
-	r = praw.Reddit(user_agent='xbmc pro sport addon')
+	r = praw.Reddit(user_agent='xbmc pro sport addon', disable_update_check=praw_update_disabled)
 	if username and password:
 		try:
 			r.login(username, password)

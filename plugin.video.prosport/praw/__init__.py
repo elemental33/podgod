@@ -368,6 +368,7 @@ class BaseReddit(object):
         self.modhash = None
 
         # Check for updates if permitted and this is the first Reddit instance
+        print ("PRAW update disabled: %s" % disable_update_check)
         if not disable_update_check and not self.update_checked \
                 and self.config.check_for_updates:
             update_check(__name__, __version__)
