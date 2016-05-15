@@ -48,8 +48,15 @@ if hasattr(sys.modules["__main__"], "dbg"):
 else:
     dbg = False
 
+import xbmcaddon
+__addon__ = xbmcaddon.Addon('plugin.video.prosport')
+if __addon__.getSetting('showcast'):
+    dbg = True
+
 if hasattr(sys.modules["__main__"], "dbglevel"):
     dbglevel = sys.modules["__main__"].dbglevel
+elif dbg:
+    dbglevel = 3
 else:
     dbglevel = 3
 
@@ -560,6 +567,6 @@ def openFile(filepath, options=u"r"):
 def log(description, level=0):
     if dbg and dbglevel > level:
         try:
-            xbmc.log((u"[%s] %s : '%s'" % (plugin, inspect.stack()[1][3], description)).decode("utf-8"), xbmc.LOGNOTICE)
+            xbmc.log((u"[plugin.video.prosport][%s] %s : '%s'" % (plugin, inspect.stack()[1][3], description)).decode("utf-8"), xbmc.LOGNOTICE)
         except:
-            xbmc.log(u"FALLBACK [%s] %s : '%s'" % (plugin, inspect.stack()[1][3], repr(description)), xbmc.LOGNOTICE)
+            xbmc.log(u"FALLBACK [plugin.video.prosport][%s] %s : '%s'" % (plugin, inspect.stack()[1][3], repr(description)), xbmc.LOGNOTICE)
