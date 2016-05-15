@@ -300,8 +300,11 @@ def getProStreams(ur, home, away):
 	r.config.api_request_delay = 0
 	links=[]
 	for submission in r.get_subreddit(ur+'streams').get_hot(limit=30):
-		if (home_l in submission.title.lower() and away_l in submission.title.lower()) or (home_f in submission.title.lower() and away_l in submission.title.lower()) or (home_l in submission.title.lower() and away_f in submission.title.lower()) or (home_f in submission.title.lower() and away_f in submission.title.lower()):
-			regex = re.compile(r'([-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?)',re.IGNORECASE)
+		if (home_l in submission.title.lower() and away_l in submission.title.lower()) or \
+                   (home_f in submission.title.lower() and away_l in submission.title.lower()) or \
+                   (home_l in submission.title.lower() and away_f in submission.title.lower()) or \
+                   (home_f in submission.title.lower() and away_f in submission.title.lower()):
+                        regex = re.compile(r'([-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b[:0-9]*(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?)',re.IGNORECASE)
 			link = re.findall(regex, submission.selftext.encode('utf-8'))
 			links = links + link
 			flat_comments = praw.helpers.flatten_tree(submission.comments)
@@ -409,6 +412,9 @@ def DisplayLinks(links, orig_title):
 		elif url not in urls and 'streamup.com' in url and 'm3u8' not in url:
 			addLink('Streamup.com', orig_title, url, mode="play")
 			urls.append(url)
+                elif url not in urls and 'stream.ssh101.com' in url:
+                        addLink('stream.ssh101.com', orig_title, url, mode="play")
+                        urls.append(url)
 		elif url not in urls and 'torula' in url:
 			addLink('Torula.us', orig_title, url, mode="play")
 			urls.append(url)
@@ -932,9 +938,12 @@ def Streamandme(url):
 			return url
 		link = common.parseDOM(html, "iframe",  ret="src")[0]
                 common.log("iframe: %s" % link)
-		channel = link.split('/')[3]
-		link = GetStreamup(channel)
-		return link
+                if 'stream.ssh101.com' in link:
+                    return Universal(link)
+                else:
+		    channel = link.split('/')[3]
+		    link = GetStreamup(channel)
+		    return link
 	except:
 		return None
 
@@ -1203,7 +1212,9 @@ def Universal(url):
 		link = hdcast(id)
 		return link
 	if 'm3u8' in url:
+                common.log("...M3U8 stream found")
 		return url
+        common.log("Peaking into HTML")
 	html = GetURL(url, referer=url)
 	if html and 'weplayer.pw' in html:
 		id = html.split("'text/javascript'>id='")[-1]
@@ -1248,10 +1259,12 @@ def Universal(url):
 		link = sostart(url)
 		return link
 	if html and 'https://streamboat.tv/@' in html:
-			url = html.split('https://streamboat.tv/@')[-1].split('"')[0]
-			url = 'https://streamboat.tv/@'+url
-			url = Streambot(url)
-			return url
+                common.log("Streamboat link")
+		url = html.split('https://streamboat.tv/@')[-1].split('"')[0]
+		url = 'https://streamboat.tv/@'+url
+                common.log("...url: %s" % url)
+		url = Streambot(url)
+		return url
 	elif html and 'sawlive.tv' in html:
 		#url = re.compile('//(.+?)/(?:embed|v)/([0-9a-zA-Z-_]+)').findall(html)[0]
 		#url = 'http://%s/embed/%s' % (url[0], url[1])
@@ -1262,10 +1275,12 @@ def Universal(url):
 		return link
 	elif html and '.m3u8' in html:
 		link = re.findall('(http://.+?\.m3u8)',html)[0]
+                common.log("... found m3u8 link: %s" % link)
 		return link
 	elif html and 'rtmp' in html and 'jwplayer' in html:
 		link = re.findall('(rtmp://.+?")',html)[0]
 		link = link.replace('"','')
+                common.log("rtmp link: %s" % link)
 		return link
 	else:
 		domain = urlparse.urlparse(url).netloc
@@ -1273,6 +1288,7 @@ def Universal(url):
 		urls = common.parseDOM(html, 'iframe', ret='src')
 		if urls:
 			for url in urls:
+                                common.log("iframe link: %s" % url)
 				if 'http://' not in url and 'https://' not in url:
 					if not url.startswith('/'):
 						url = '/'+url
