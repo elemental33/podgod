@@ -363,6 +363,7 @@ def DisplayLinks(links, orig_title):
 	print links
 	for url in links:
 		url = url[0]
+                common.log("url: %s" % url)
 		if 'http://' not in url and 'https://' not in url:
 			url = 'http://www.'+url
 		if url not in urls and 'blabseal.com' in url:
@@ -448,6 +449,8 @@ def DisplayLinks(links, orig_title):
 		elif url not in urls and '.m3u8' in url and 'room' not in url and 'anvato' not in url and 'mlblive-akc' not in url and 'YES' not in url:
 			addLink('M3U8 stream', orig_title, url, mode="play")
 			urls.append(url)
+                elif not any(el in url for el in sd_streams):
+                        common.log("skip url: %s" % url)
 		if show_sd=='true':
 			if url not in urls and 'ace' not in url and any(el in url for el in sd_streams):
 				title = '(SD) '
@@ -461,6 +464,7 @@ def DisplayLinks(links, orig_title):
 	
 def ParseLink(el, orig_title):
 	el = 'http'+el.split('http')[-1]
+        common.log("el/title: %s / %s" % (el, orig_title))
 	if 'caststreams' in el:
 		url = Caststreams(orig_title)
 		return url
@@ -656,6 +660,7 @@ def PlayArchive(url):
 	xbmcplugin.endOfDirectory(h, cacheToDisc=True)
 
 def GetStreamup(channel):
+        common.log("channel: %s" % channel)
 	try:
 		chan = GetJSON('https://api.streamup.com/v1/channels/'+channel)
 		if chan['channel']['live']:
@@ -883,10 +888,13 @@ def CbcSportAz(url):
 		return None
 			
 def Streambot(url):
+        common.log("url: %s" % url)
 	try:
 		html = GetURL(url, referer=url)
 		link1 = 'http://' + html.split("cdn_host: '")[-1].split("',")[0]
 		link2 = html.split("playlist_url: '")[-1].split("',")[0]
+                common.log(" ... link1: %s" % link1)
+                common.log(" ... link2: %s" % link2)
 		link = link1+link2
 		return link
 	except:
@@ -913,6 +921,7 @@ def Nbanhlstreams(url):
 		return None
 		
 def Streamandme(url):
+        common.log("url: %s" % url)
 	try:
 		html = GetURL(url)
 		if 'https://streamboat.tv/@' in html:
@@ -921,6 +930,7 @@ def Streamandme(url):
 			url = Streambot(url)
 			return url
 		link = common.parseDOM(html, "iframe",  ret="src")[0]
+                common.log("iframe: %s" % link)
 		channel = link.split('/')[3]
 		link = GetStreamup(channel)
 		return link
@@ -1157,6 +1167,7 @@ def Castalba(url):
 
 
 def Universal(url):
+        common.log("url: %s" % url)
 	if 'zona4vip.com/live' in url:
 		url = url.replace('/live','')
 	if 'serbiaplus.club/wlive' in url:

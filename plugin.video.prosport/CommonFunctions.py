@@ -567,6 +567,6 @@ def openFile(filepath, options=u"r"):
 def log(description, level=0):
     if dbg and dbglevel > level:
         try:
-            xbmc.log((u"[plugin.video.prosport][%s] %s : '%s'" % (plugin, inspect.stack()[1][3], description)).decode("utf-8"), xbmc.LOGNOTICE)
+            xbmc.log((u"[plugin.video.prosport][common] %s : '%s'" % (inspect.stack()[1][3], description)).decode("utf-8"), xbmc.LOGNOTICE)
         except:
-            xbmc.log(u"FALLBACK [plugin.video.prosport][%s] %s : '%s'" % (plugin, inspect.stack()[1][3], repr(description)), xbmc.LOGNOTICE)
+            xbmc.log(u"FALLBACK [plugin.video.prosport][common] %s : '%s'" % (inspect.stack()[1][3], repr(description)), xbmc.LOGNOTICE)
